@@ -3,8 +3,8 @@
 import { useState } from "react";
 import LandingPopup from "./LandingPopup";
 
-// URL del sitio principal de Reyes IA (se carga en iframe, el usuario siempre ve reyesia.com)
-const SITIO_PRINCIPAL_URL = "https://elaborate-kringle-066cad.netlify.app";
+// URL del sitio principal (subdominio apunta a Netlify; evita "rechazó la conexión")
+const SITIO_PRINCIPAL_URL = "https://main.reyesia.com";
 
 export default function HomeWithPopup() {
   const [showPopup, setShowPopup] = useState(true);
