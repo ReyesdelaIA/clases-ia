@@ -38,7 +38,7 @@ export default function LandingPopup({ onClose }: { onClose: () => void }) {
         {/* Botón cerrar */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[10] flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 transition-all focus:outline-none focus:ring-2 focus:ring-white/50"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[120] flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 transition-all focus:outline-none focus:ring-2 focus:ring-white/50"
           aria-label="Cerrar y ver sitio principal"
         >
           <svg
