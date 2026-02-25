@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Landing Reyes IA
 
-## Getting Started
+Landing de inscripción para clases presenciales de IA en Santiago.
 
-First, run the development server:
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir en `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notificaciones de nuevos registros (email)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+El formulario envía datos a `POST /api/lead`, que manda correo usando Resend.
 
-## Learn More
+### 1) Variables de entorno
 
-To learn more about Next.js, take a look at the following resources:
+Crear `.env.local` basado en `.env.example`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cp .env.example .env.local
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Completar:
 
-## Deploy on Vercel
+- `RESEND_API_KEY`: API key de Resend
+- `LEADS_TO_EMAIL`: correo que recibe leads (ej: `felipe@reyesia.com`)
+- `RESEND_FROM_EMAIL`: remitente (idealmente en dominio verificado)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2) Probar envío
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Con el servidor corriendo, enviar el formulario desde la landing.
+
+## Deploy en Vercel
+
+```bash
+npm i -g vercel
+vercel
+```
+
+Luego, en Vercel Dashboard:
+
+1. Project Settings -> Environment Variables: agregar las 3 variables (`RESEND_API_KEY`, `LEADS_TO_EMAIL`, `RESEND_FROM_EMAIL`).
+2. Hacer redeploy.
+
+## Conectar dominio `www.reyesia.com`
+
+En Vercel:
+
+1. Ir al proyecto -> **Settings -> Domains**
+2. Agregar:
+   - `reyesia.com`
+   - `www.reyesia.com`
+3. En tu proveedor DNS, crear/ajustar:
+   - `A` para raíz (`@`) a `76.76.21.21`
+   - `CNAME` para `www` a `cname.vercel-dns.com`
+4. Esperar propagación y verificar en Vercel.
