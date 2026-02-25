@@ -2,8 +2,8 @@
 
 import LandingPopup from "./LandingPopup";
 
-// Al cerrar el popup, redirigir al sitio principal (main.reyesia.com = Netlify)
-const SITIO_PRINCIPAL_URL = "https://main.reyesia.com";
+// Redirigir al sitio principal (Netlify). main.reyesia.com tiene error SSL por ahora
+const SITIO_PRINCIPAL_URL = "https://elaborate-kringle-066cad.netlify.app";
 
 export default function HomeWithPopup() {
   const handleClose = () => {
