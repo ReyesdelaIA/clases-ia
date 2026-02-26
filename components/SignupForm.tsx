@@ -37,31 +37,47 @@ export default function SignupForm() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+    const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
+
     try {
-      const payload = {
-        name: formData.get("name"),
-        email: formData.get("email"),
-        phone: formData.get("phone"),
-        countryCode: selectedCountry.code,
-        work: formData.get("work"),
-        aiLevel: formatAiLevel(formData.get("ai_level")),
-      };
-
-      const response = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("No se pudo enviar la inscripción.");
+      if (formspreeId) {
+        // Formspree: usar FormData (formato recomendado)
+        formData.set("phone", `${selectedCountry.code} ${formData.get("phone") ?? ""}`);
+        formData.append("_subject", `Nueva inscripción Reyes IA - ${formData.get("name")}`);
+        const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
+          method: "POST",
+          body: formData,
+          headers: { Accept: "application/json" },
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          const msg = data?.errors?.map((e: { message?: string }) => e.message).join(", ") || "No se pudo enviar.";
+          throw new Error(msg);
+        }
+      } else {
+        const payload = {
+          name: formData.get("name"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          countryCode: selectedCountry.code,
+          work: formData.get("work"),
+          aiLevel: formatAiLevel(formData.get("ai_level")),
+        };
+        const response = await fetch("/api/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error("No se pudo enviar la inscripción.");
       }
 
       setStatus("success");
       form.reset();
     } catch (error) {
       console.error("Error:", error);
-      setErrorMessage("Hubo un error al enviar. Por favor intenta de nuevo.");
+      setErrorMessage(
+        error instanceof Error ? error.message : "Hubo un error al enviar. Por favor intenta de nuevo."
+      );
       setStatus("error");
     }
   }
